@@ -7,6 +7,8 @@ import plotly.graph_objects as go
 from scipy.stats import skew, kurtosis, entropy
 from sklearn.metrics import mean_squared_error
 from io import StringIO
+import base64
+import os
 
 if 'all_stats' not in st.session_state:
     st.session_state.all_stats = pd.DataFrame()
@@ -47,10 +49,46 @@ if 'file_key' not in st.session_state:
 if 'uploaded_files' not in st.session_state:
     st.session_state.uploaded_files = {}
 
-st.markdown("""
+# Load and encode the logo
+if 'logo_base64' not in st.session_state:
+    logo_path = 'Design.png'
+    if os.path.exists(logo_path):
+        with open(logo_path, 'rb') as f:
+            logo_data = f.read()
+            st.session_state.logo_base64 = base64.b64encode(logo_data).decode()
+    else:
+        st.session_state.logo_base64 = ''
+
+logo_base64 = st.session_state.get('logo_base64', '')
+st.markdown(f"""
     <style>
-    .stApp {background-color: rgba(135, 206, 235, 0.5);}
-    button {height: 40px; width: 250px; font-size: 16px;}
+    .stApp {{
+        background-color: rgba(135, 206, 235, 0.5);
+    }}
+    .stApp::before {{
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('data:image/png;base64,{logo_base64}');
+        background-size: 25%;
+        background-position: center 85%;
+        background-repeat: no-repeat;
+        opacity: 0.1;
+        z-index: -1;
+        pointer-events: none;
+    }}
+    /* Navbar styling */
+    header[data-testid="stHeader"] {{
+        background-color: #C5E7F5 !important;
+    }}
+    /* Toolbar styling */
+    .stAppDeployButton {{
+        color: #ffffff !important;
+    }}
+    button {{height: 40px; width: 250px; font-size: 16px;}}
     </style>
     """, unsafe_allow_html=True)
 
