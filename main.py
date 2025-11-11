@@ -10,14 +10,8 @@ from io import StringIO
 import base64
 import os
 
-if "uploaded_files" not in st.session_state:
-    st.session_state.uploaded_files = []
-
-if "all_stats" not in st.session_state:
+if 'all_stats' not in st.session_state:
     st.session_state.all_stats = pd.DataFrame()
-
-if "file_key" not in st.session_state:
-    st.session_state.file_key = 0
 
 def calculate_statistical_data(reconstructed_signal,noise):
     params = {
@@ -337,6 +331,7 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
