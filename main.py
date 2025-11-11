@@ -242,8 +242,8 @@ with container:
 
         tf = time[2] - time[1]  
         fs=1/tf
-        NFFT = 2 ** int(np.ceil(np.log2(len(signal))))       # Next power of 2
-        fft_raw = np.abs(np.fft.fft(signal, NFFT)) / len(signal)  # FFT with zero-padding
+        NFFT = 2 ** int(np.ceil(np.log2(len(Signal))))       # Next power of 2
+        fft_raw = np.abs(np.fft.fft(signal, NFFT)) / len(Signal)  # FFT with zero-padding
         fft_freqs = fs * np.arange(0, NFFT // 2 + 1) / NFFT 
         fft_denoised = np.abs(np.fft.fft(denoised_signal))[:len(Signal) // 2]
         
@@ -331,6 +331,7 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
