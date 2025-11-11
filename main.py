@@ -163,7 +163,7 @@ with container:
         denoised_signal = pywt.waverec(denoised_coeffs, selected_wavelet)[:len(Signal)]
         
         noise = Signal - denoised_signal
-        current_stats = calculate_statistical_data(denoised_signal,noise)
+        current_stats = calculate_statistical_data(Signal,noise)
         stats_df = pd.DataFrame([current_stats], index=[selected_file])
         
         if selected_file not in st.session_state.all_stats.index:
@@ -331,6 +331,7 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
