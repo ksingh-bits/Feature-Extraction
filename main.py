@@ -167,8 +167,10 @@ with container:
         current_stats = calculate_statistical_data( denoised_signal, noise)
         stats_df = pd.DataFrame([current_stats], index=[selected_file])
         
-        if selected_file not in st.session_state.all_stats.index:
-            st.session_state.all_stats = pd.concat([st.session_state.all_stats, stats_df])
+     
+
+        st.session_state.all_stats = st.session_state.all_stats.drop(index=selected_file, errors='ignore')
+        st.session_state.all_stats = pd.concat([st.session_state.all_stats, stats_df])
 
         st.subheader("Source Signal")
         source_signal = st.selectbox("Select Source Signal", ['Raw Signal', 'Denoised Signal'])
@@ -332,6 +334,7 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
