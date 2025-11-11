@@ -13,9 +13,9 @@ import os
 if 'all_stats' not in st.session_state:
     st.session_state.all_stats = pd.DataFrame()
 
-def calculate_statistical_data(denoised_signal, noise):
+def calculate_statistical_data(reconstructed_signal, noise):
     params = {
-        "Mean": np.mean(denoised_signal),
+        "Mean": np.mean(reconstructed_signal),
         "Median": np.median(reconstructed_signal),
         "Mode": pd.Series(reconstructed_signal).mode()[0],
         "Std Dev": np.std(reconstructed_signal),
@@ -329,4 +329,5 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
