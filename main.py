@@ -301,7 +301,6 @@ with container:
 
         st.markdown(f"<h3 style='text-align: center;'>Download Consolidated Parameters</h3>", unsafe_allow_html=True)
         
-        @st.cache_data
         def convert_df(df):
             return df.to_csv(index=True).encode('utf-8')
         
@@ -329,5 +328,6 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
