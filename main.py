@@ -242,9 +242,9 @@ with container:
 
         tf = time[2] - time[1]  
         fs=1/tf
-        
-        fft_raw = np.abs(np.fft.fft(Signal))[:len(Signal) // 2]
-        fft_freqs = np.linspace(100, fs / 2, len(fft_raw))
+        NFFT = 2**int(np.ceil(np.log2(len(Signal))))
+        fft_raw = np.abs(np.fft.fft(Signal),NFFT) / len(Signal)
+        fft_freqs = fs * np.arange(0, NFFT//2 + 1) / NFFT
         fft_denoised = np.abs(np.fft.fft(denoised_signal))[:len(Signal) // 2]
         
         fig_fft = go.Figure()
@@ -331,6 +331,7 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
