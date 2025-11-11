@@ -13,7 +13,7 @@ import os
 if 'all_stats' not in st.session_state:
     st.session_state.all_stats = pd.DataFrame()
 
-def calculate_statistical_data(reconstructed_signal,noise):
+def calculate_statistical_data(reconstructed_signal):
     params = {
         "Mean": np.mean(reconstructed_signal),
         "Median": np.median(reconstructed_signal),
@@ -33,7 +33,7 @@ def calculate_statistical_data(reconstructed_signal,noise):
         "Impulse Factor": np.max(reconstructed_signal) / np.mean(reconstructed_signal),
         "Shape Factor": np.sqrt(np.mean(reconstructed_signal**2)) / np.mean(reconstructed_signal),
         "Shannon Entropy": entropy(np.abs(reconstructed_signal)),
-        "Signal-to-Noise Ratio": 10 * np.log10(np.sum(reconstructed_signal**2) / np.sum(noise**2)),
+        #"Signal-to-Noise Ratio": 10 * np.log10(np.sum(reconstructed_signal**2) / np.sum(noise**2)),
         "Root Mean Square Error": np.sqrt(mean_squared_error(np.zeros_like(reconstructed_signal), reconstructed_signal)),
         "Maximum Error": np.max(np.abs(np.zeros_like(reconstructed_signal) - reconstructed_signal)),
         "Mean Absolute Error": np.mean(np.abs(np.zeros_like(reconstructed_signal) - reconstructed_signal)),
@@ -163,7 +163,7 @@ with container:
         denoised_signal = pywt.waverec(denoised_coeffs, selected_wavelet)[:len(Signal)]
         
         noise = Signal - denoised_signal
-        current_stats = calculate_statistical_data(denoised_signal,noise)
+        current_stats = calculate_statistical_data(Signal)
         stats_df = pd.DataFrame([current_stats], index=[selected_file])
         
         if selected_file not in st.session_state.all_stats.index:
@@ -331,6 +331,7 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
