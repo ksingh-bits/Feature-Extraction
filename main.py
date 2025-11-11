@@ -142,13 +142,18 @@ with container:
         
         st.write("Select Variables:")
         col1, col2 = st.columns(2)
-        with col1:
-            time_column = st.selectbox("Time:", column_options, key=f"time_{selected_file}")
-        with col2:
-            signal_column = st.selectbox("Signal:", column_options, key=f"signal_{selected_file}")
+        
 
-        time = df.iloc[:, column_options.index(time_column)].values
-        Signal = df.iloc[:, column_options.index(signal_column)].values
+        time_key = f"time_col_{selected_file}"
+        signal_key = f"signal_col_{selected_file}"
+        with col1:
+            time_column = st.selectbox("Time:", column_options, key=time_key)
+        with col2:
+            signal_column = st.selectbox("Signal:", column_options, key=signal_key)
+        # Fetch the correct columns
+       time = df.iloc[:, column_options.index(time_column)].values
+       signal = df.iloc[:, column_options.index(signal_column)].values
+
 
         wavelet_options = ['bior1.3', 'bior1.5', 'bior2.2', 'bior2.4', 
                          'bior2.6', 'bior2.6', 'bior3.1', 'bior3.3', 
@@ -331,6 +336,7 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
