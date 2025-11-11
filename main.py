@@ -320,7 +320,7 @@ with container:
 
     with st.expander("File Management", expanded=False):
         col1, col2 = st.columns(2)
-        with col2:
+        with col1:
             if st.button("Clear All Files"):
                 # Clear all uploaded files and reset key
                 st.session_state.uploaded_files.clear()
@@ -328,9 +328,10 @@ with container:
                 st.session_state.file_key += 1  # Force uploader reset
                 st.rerun()
         
-        with col1:
+        with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
