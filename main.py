@@ -13,7 +13,7 @@ import os
 if 'all_stats' not in st.session_state:
     st.session_state.all_stats = pd.DataFrame()
 
-def calculate_statistical_data(reconstructed_signal):
+def calculate_statistical_data(reconstructed_signal,noise):
     params = {
         "Mean": np.mean(reconstructed_signal),
         "Median": np.median(reconstructed_signal),
@@ -162,8 +162,8 @@ with container:
         denoised_coeffs = [pywt.threshold(c, threshold(c), mode='soft') if i > 0 else c for i, c in enumerate(coeffs)]
         denoised_signal = pywt.waverec(denoised_coeffs, selected_wavelet)[:len(Signal)]
         
-        #noise = Signal - denoised_signal
-        current_stats = calculate_statistical_data(denoised_signal)
+        noise = Signal - denoised_signal
+        current_stats = calculate_statistical_data(denoised_signal,noise)
         stats_df = pd.DataFrame([current_stats], index=[selected_file])
         
         if selected_file not in st.session_state.all_stats.index:
