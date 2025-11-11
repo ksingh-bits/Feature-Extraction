@@ -28,7 +28,7 @@ def calculate_statistical_data(reconstructed_signal, noise):
         "Skewness": skew(reconstructed_signal),
         "Kurtosis": kurtosis(reconstructed_signal),
         "Energy": np.trapz(reconstructed_signal**2, np.arange(len(reconstructed_signal))),
-        "Power": np.trapz(reconstructed_signal**2, np.arange(len(reconstructed_signal))) / (2 * (1 / 20000)),
+        "Power": np.trapz(reconstructed_signal**2, np.arange(len(reconstructed_signal))) / (2 * (1 / fs)),
         "Crest Factor": np.max(reconstructed_signal) / np.sqrt(np.mean(reconstructed_signal**2)),
         "Impulse Factor": np.max(reconstructed_signal) / np.mean(reconstructed_signal),
         "Shape Factor": np.sqrt(np.mean(reconstructed_signal**2)) / np.mean(reconstructed_signal),
@@ -239,9 +239,12 @@ with container:
         fft_option = st.selectbox("Select FFT Option", 
                                 ['FFT of Raw Signal', 'FFT of Denoised Signal', 
                                  'FFT of Approx Coefficients', 'FFT of Detail Coefficients'])
+
+        tf = time[2] - time[1]  
+        fs=1/tf
         
         fft_raw = np.abs(np.fft.fft(Signal))[:len(Signal) // 2]
-        fft_freqs = np.linspace(100, 20000 / 2, len(fft_raw))
+        fft_freqs = np.linspace(100, fs / 2, len(fft_raw))
         fft_denoised = np.abs(np.fft.fft(denoised_signal))[:len(Signal) // 2]
         
         fig_fft = go.Figure()
@@ -251,14 +254,14 @@ with container:
             fig_fft.add_trace(go.Scatter(x=fft_freqs, y=fft_denoised, mode='lines', name='FFT of Denoised Signal'))
         elif fft_option == 'FFT of Approx Coefficients':
             fft_approx_coeffs = np.abs(np.fft.fft(coeffs[0]))[:len(coeffs[0]) // 2]
-            fft_freqs_approx = np.linspace(100, 20000 / 2, len(fft_approx_coeffs))
+            fft_freqs_approx = np.linspace(100, fs / 2, len(fft_approx_coeffs))
             fig_fft.add_trace(go.Scatter(x=fft_freqs_approx, y=fft_approx_coeffs, 
                                       mode='lines', name='FFT of Approx Coefficients'))
         elif fft_option == 'FFT of Detail Coefficients':
             detail_coeffs = coeffs[1:]
             for i, coeff in enumerate(detail_coeffs):
                 fft_detail_coeffs = np.abs(np.fft.fft(coeff))[:len(coeff) // 2]
-                fft_freqs_detail = np.linspace(100, 20000 / 2, len(fft_detail_coeffs))
+                fft_freqs_detail = np.linspace(100, fs / 2, len(fft_detail_coeffs))
                 fig_fft.add_trace(go.Scatter(x=fft_freqs_detail, y=fft_detail_coeffs, 
                                           mode='lines', name=f'FFT of Detail Coefficients {i+1}'))
         
@@ -280,10 +283,10 @@ with container:
         spectrum_option = st.selectbox("Select Time-Frequency Spectrum Option", ['Raw Signal', 'Denoised Signal'])
         
         if spectrum_option == 'Raw Signal':
-            f, t, Sxx = spectrogram(Signal, 20000)
+            f, t, Sxx = spectrogram(Signal, fs)
             fig_spectrum = go.Figure(data=go.Heatmap(z=10 * np.log10(Sxx), x=t, y=f, colorscale='Viridis'))
         else:
-            f, t, Sxx = spectrogram(denoised_signal, 20000)
+            f, t, Sxx = spectrogram(denoised_signal, fs)
             fig_spectrum = go.Figure(data=go.Heatmap(z=10 * np.log10(Sxx), x=t, y=f, colorscale='Plasma'))
         
         fig_spectrum.update_layout(
@@ -328,6 +331,7 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
