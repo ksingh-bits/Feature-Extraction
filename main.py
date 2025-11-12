@@ -9,12 +9,11 @@ from sklearn.metrics import mean_squared_error
 from io import StringIO
 import base64
 import os
-tf = time[2] - time[1]  
-fs=1/tf
+
 if 'all_stats' not in st.session_state:
     st.session_state.all_stats = pd.DataFrame()
 
-def calculate_statistical_data(reconstructed_signal, noise):
+def calculate_statistical_data(reconstructed_signal, noise,fs):
     params = {
         "Mean": np.mean(reconstructed_signal),
         "Median": np.median(reconstructed_signal),
@@ -150,6 +149,8 @@ with container:
 
         time = df.iloc[:, column_options.index(time_column)].values
         Signal = df.iloc[:, column_options.index(signal_column)].values
+        tf = time[2] - time[1]  
+        fs=1/tf
 
 
         wavelet_options = ['bior1.3', 'bior1.5', 'bior2.2', 'bior2.4', 
@@ -165,7 +166,7 @@ with container:
         denoised_signal = pywt.waverec(denoised_coeffs, selected_wavelet)[:len(Signal)]
         
         noise = Signal - denoised_signal
-        current_stats = calculate_statistical_data( denoised_signal, noise)
+        current_stats = calculate_statistical_data( denoised_signal, noise,fs)
         stats_df = pd.DataFrame([current_stats], index=[selected_file])
         
      
@@ -335,6 +336,7 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
