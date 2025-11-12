@@ -14,6 +14,8 @@ if 'all_stats' not in st.session_state:
     st.session_state.all_stats = pd.DataFrame()
 
 def calculate_statistical_data(reconstructed_signal, noise):
+    tf = time[2] - time[1]  
+    fs=1/tf
     params = {
         "Mean": np.mean(reconstructed_signal),
         "Median": np.median(reconstructed_signal),
@@ -334,6 +336,7 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
