@@ -28,7 +28,7 @@ def calculate_statistical_data(reconstructed_signal, noise):
         "Skewness": skew(reconstructed_signal),
         "Kurtosis": kurtosis(reconstructed_signal),
         "Energy": np.trapz(reconstructed_signal**2, np.arange(len(reconstructed_signal))),
-        "Power": np.trapz(reconstructed_signal**2, np.arange(len(reconstructed_signal))) / (2 * (1 / 20000)),
+        "Power": np.trapz(reconstructed_signal**2, np.arange(len(reconstructed_signal))) / (2 * (1 / fs)),
         "Crest Factor": np.max(reconstructed_signal) / np.sqrt(np.mean(reconstructed_signal**2)),
         "Impulse Factor": np.max(reconstructed_signal) / np.mean(reconstructed_signal),
         "Shape Factor": np.sqrt(np.mean(reconstructed_signal**2)) / np.mean(reconstructed_signal),
@@ -334,6 +334,7 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
