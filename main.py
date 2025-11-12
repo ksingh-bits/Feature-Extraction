@@ -245,8 +245,6 @@ with container:
                                 ['FFT of Raw Signal', 'FFT of Denoised Signal', 
                                  'FFT of Approx Coefficients', 'FFT of Detail Coefficients'])
 
-        tf = time[2] - time[1]  
-        fs=1/tf
         NFFT = 2 ** int(np.ceil(np.log2(len(Signal))))       # Next power of 2
         fft_raw = np.abs(np.fft.fft(Signal, NFFT)) / len(Signal)  # FFT with zero-padding
         fft_freqs = fs * np.arange(0, NFFT // 2 + 1) / NFFT 
@@ -336,6 +334,7 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
