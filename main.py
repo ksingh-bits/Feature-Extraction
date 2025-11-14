@@ -246,9 +246,9 @@ with container:
                                  'FFT of Approx Coefficients', 'FFT of Detail Coefficients'])
 
         NFFT = 2 ** int(np.ceil(np.log2(len(Signal))))       # Next power of 2
-        fft_raw = np.abs(np.fft.fft(Signal, NFFT)) / len(Signal)  # FFT with zero-padding
+        fft_raw = 2*np.abs(np.fft.fft(Signal, NFFT)) / len(Signal)  # FFT with zero-padding
         fft_freqs = fs * np.arange(0, NFFT // 2 + 1) / NFFT 
-        fft_denoised = np.abs(np.fft.fft(denoised_signal))[:len(Signal) // 2]
+        fft_denoised = 2*np.abs(np.fft.fft(denoised_signal))[:len(Signal) // 2]
         
         fig_fft = go.Figure()
         if fft_option == 'FFT of Raw Signal':
@@ -334,6 +334,7 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
