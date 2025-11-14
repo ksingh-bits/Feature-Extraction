@@ -159,7 +159,7 @@ with container:
                          'bior5.5', 'bior6.8']
         
         selected_wavelet = st.selectbox("Select Wavelet Type", wavelet_options)
-        n_levels = st.slider("Define decomposition levels (1-20):", 1, 20, 7)
+        n_levels = st.slider("Define decomposition levels (1-20):", 1, 20, 1)
         coeffs = pywt.wavedec(Signal, selected_wavelet, level=n_levels)
         threshold = lambda x: np.sqrt(2 * np.log(len(x))) * np.median(np.abs(x) / 0.6745)
         denoised_coeffs = [pywt.threshold(c, threshold(c), mode='soft') if i > 0 else c for i, c in enumerate(coeffs)]
@@ -334,6 +334,7 @@ with container:
         with col2:
             st.write(f"Loaded Files: {len(st.session_state.uploaded_files)}")
             st.write(f"Stored Records: {len(st.session_state.all_stats)}")
+
 
 
 
